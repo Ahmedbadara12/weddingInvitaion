@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="You are cordially invited to celebrate the love story and wedding of Alexander and Sophia. Save the date for our special day.">
+  <title>Save the Date | Alexander & Sophia's Wedding</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Floating Hearts Background Container -->
+  <div class="hero-overlay" id="hearts-container"></div>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-header">
+      <p class="hero-date">Saturday, September 19, 2026</p>
+      <h1 class="hero-names">Alexander<span>&</span>Sophia</h1>
+      <p class="hero-subtitle">Are getting married and request the pleasure of your company</p>
+    </div>
+
+    <!-- Sliced Interactive Illustration -->
+    <div class="illustration-wrapper" id="illustration-card">
+      <div class="illustration-grid">
+        <div class="illustration-layer layer-groom" aria-label="Groom illustration"></div>
+        <div class="illustration-layer layer-center" aria-label="White roses and floating hearts"></div>
+        <div class="illustration-layer layer-bride" aria-label="Bride illustration"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Countdown Timer Section -->
+  <section class="countdown-section" aria-label="Countdown to wedding">
+    <div class="container">
+      <h2 class="countdown-title">Counting Down to the Big Day</h2>
+      <div class="countdown-container">
+        <div class="countdown-item" id="cd-days">
+          <div class="countdown-number">00</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item" id="cd-hours">
+          <div class="countdown-number">00</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item" id="cd-minutes">
+          <div class="countdown-number">00</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-item" id="cd-seconds">
+          <div class="countdown-number">00</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wedding Details & RSVP Cards Section -->
+  <main class="content-section">
+    <div class="container">
+      <div class="grid-two-cols">
+        
+        <!-- Wedding Details Card -->
+        <section class="luxury-card reveal" id="details-card">
+          <div class="card-border-decor"></div>
+          <h2 class="card-title">Wedding Details</h2>
+          
+          <ul class="details-list">
+            <li class="details-item">
+              <span class="details-icon" aria-hidden="true">
+                <!-- SVG Clock/Time Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </span>
+              <div class="details-text">
+                <h4>Ceremony & Celebration</h4>
+                <p>September 19, 2026 at 4:30 PM</p>
+                <p>Welcome drinks served starting from 4:00 PM</p>
+              </div>
+            </li>
+
+            <li class="details-item">
+              <span class="details-icon" aria-hidden="true">
+                <!-- SVG Map Pin Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </span>
+              <div class="details-text">
+                <h4>The Rose Gardens Mansion</h4>
+                <p>128 Pastel Valley Blvd, San Francisco, CA</p>
+                <p>Cocktail attire requested</p>
+              </div>
+            </li>
+
+            <li class="details-item">
+              <span class="details-icon" aria-hidden="true">
+                <!-- SVG Star/Gift Icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              </span>
+              <div class="details-text">
+                <h4>Registries & Gifts</h4>
+                <p>Your presence is our greatest present. If you wish to honor us with a gift, a contribution to our honeymoon fund is appreciated.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- RSVP Form Card -->
+        <section class="luxury-card reveal" id="rsvp-card">
+          <div class="card-border-decor"></div>
+          <h2 class="card-title">RSVP</h2>
+          
+          <!-- RSVP Input Form -->
+          <form class="rsvp-form" id="rsvp-form-element">
+            <div class="form-group">
+              <label for="rsvp-name">Full Name</label>
+              <input type="text" id="rsvp-name" class="form-control" required placeholder="Please enter your name">
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-email">Email Address</label>
+              <input type="email" id="rsvp-email" class="form-control" required placeholder="name@example.com">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Will you attend?</label>
+                <div class="radio-group">
+                  <div class="radio-option">
+                    <input type="radio" id="attend-yes" name="attendance" value="yes" checked>
+                    <label for="attend-yes" class="radio-label">Accepts</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" id="attend-no" name="attendance" value="no">
+                    <label for="attend-no" class="radio-label">Regrets</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" id="guests-group">
+                <label for="rsvp-guests">Number of Guests</label>
+                <select id="rsvp-guests" class="form-control">
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-message">Dietary requirements / Message</label>
+              <textarea id="rsvp-message" class="form-control" rows="3" placeholder="Optional notes..."></textarea>
+            </div>
+
+            <button type="submit" id="rsvp-submit-btn" class="btn-gold">Send Response</button>
+          </form>
+
+          <!-- Success Animation Message -->
+          <div class="success-message" id="rsvp-success">
+            <div class="success-icon" aria-hidden="true">❤</div>
+            <h3 class="card-title">Thank You!</h3>
+            <p id="rsvp-success-text">Your response has been received. We look forward to celebrating with you!</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Guestbook / Wishes Section -->
+  <section class="guestbook-section" aria-label="Wishes guestbook">
+    <div class="container guestbook-container">
+      <h2 class="countdown-title">Send Your Blessings</h2>
+      <p style="margin-bottom: 30px; opacity: 0.8;">Leave a sweet message or well wishes for Alexander & Sophia.</p>
+      
+      <form id="wish-form" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+          <input type="text" id="wish-name" class="form-control" placeholder="Your Name" required>
+        </div>
+        <textarea id="wish-message" class="form-control" rows="3" placeholder="Write your warm wishes here..." required></textarea>
+        <button type="submit" id="wish-submit-btn" class="btn-gold" style="align-self: center;">Send Love</button>
+      </form>
+
+      <!-- Wishes List -->
+      <div class="wishes-list" id="wishes-list">
+        <!-- Live wishes go here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Audio Player Floating Panel -->
+  <div class="audio-player-container">
+    <button class="audio-btn" id="music-btn" aria-label="Toggle romantic background music" title="Toggle Music">
+      <!-- Muted SVG note by default -->
+      <svg id="music-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+        <line x1="1" y1="1" x2="23" y2="23" class="mute-line" stroke="currentColor" stroke-width="2"></line>
+      </svg>
+    </button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
