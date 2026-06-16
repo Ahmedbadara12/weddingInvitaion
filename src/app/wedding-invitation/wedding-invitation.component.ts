@@ -42,7 +42,7 @@ export class WeddingInvitationComponent implements OnInit, OnDestroy, AfterViewI
 
   private destroy$ = new Subject<void>();
 
-  private readonly targetDate = new Date(2026, 8, 3, 16, 30, 0).getTime();
+  private readonly targetDate = new Date(2026, 8, 3, 19, 0, 0).getTime();
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
