@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const el = document.querySelector(`#${id} .countdown-number`);
       if (el) {
         el.textContent = String(value).padStart(2, '0');
-        // Add show class for nice fade-in entry on load
         el.parentElement.classList.add('show');
       }
     };
@@ -103,16 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('active');
-        // Optional: stop observing once revealed to lock state
         observer.unobserve(entry.target);
       }
     });
   }, {
-    threshold: 0.15
+    threshold: 0.1
   });
 
   reveals.forEach(reveal => {
-    // If element is already in viewport on load, activate immediately
     const rect = reveal.getBoundingClientRect();
     if (rect.top < window.innerHeight) {
       reveal.classList.add('active');
@@ -130,87 +127,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // -------------------------------------------------------------
-  // 5. RSVP Form Interaction
+  // 5. Google Form Loading handler
   // -------------------------------------------------------------
-  const rsvpForm = document.getElementById('rsvp-form-element');
-  const rsvpSuccess = document.getElementById('rsvp-success');
-  const attendanceRadios = document.getElementsByName('attendance');
-  const guestsGroup = document.getElementById('guests-group');
-  const rsvpGuests = document.getElementById('rsvp-guests');
-
-  // Toggle Guest count visibility based on attendance choice
-  attendanceRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-      if (e.target.value === 'no') {
-        guestsGroup.style.display = 'none';
-        rsvpGuests.value = "0"; // clear guest count
-      } else {
-        guestsGroup.style.display = 'flex';
-        rsvpGuests.value = "1";
-      }
-    });
-  });
-
-  // Handle Form Submission
-  if (rsvpForm) {
-    rsvpForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('rsvp-name').value;
-      const email = document.getElementById('rsvp-email').value;
-      const attendance = document.querySelector('input[name="attendance"]:checked').value;
-      const guests = rsvpGuests.value;
-      const message = document.getElementById('rsvp-message').value;
-
-      // Create RSVP record
-      const rsvpData = {
-        name,
-        email,
-        attendance,
-        guests,
-        message,
-        date: new Date().toLocaleDateString()
-      };
-
-      // Save to localStorage
-      localStorage.setItem('wedding_rsvp', JSON.stringify(rsvpData));
-
-      // Update success message text
-      const successText = document.getElementById('rsvp-success-text');
-      if (attendance === 'yes') {
-        successText.textContent = `Thank you, ${name}! We're thrilled you can make it, and we can't wait to celebrate our special day with you.`;
-      } else {
-        successText.textContent = `Thank you for letting us know, ${name}. You will be missed, but we appreciate you sending your warm thoughts!`;
-      }
-
-      // Transition animation
-      rsvpForm.style.transition = 'opacity 0.5s ease';
-      rsvpForm.style.opacity = '0';
+  const googleFormIframe = document.getElementById('google-form-iframe');
+  const googleFormLoading = document.querySelector('.google-form-loading');
+  if (googleFormIframe && googleFormLoading) {
+    googleFormIframe.addEventListener('load', () => {
+      googleFormLoading.style.opacity = '0';
       setTimeout(() => {
-        rsvpForm.style.display = 'none';
-        rsvpSuccess.style.display = 'flex';
-        setTimeout(() => {
-          rsvpSuccess.classList.add('show');
-        }, 50);
+        googleFormLoading.style.display = 'none';
       }, 500);
     });
-  }
-
-  // Pre-load RSVP if already submitted
-  const savedRsvp = localStorage.getItem('wedding_rsvp');
-  if (savedRsvp) {
-    const rsvp = JSON.parse(savedRsvp);
-    if (rsvpForm && rsvpSuccess) {
-      rsvpForm.style.display = 'none';
-      rsvpSuccess.style.display = 'flex';
-      rsvpSuccess.classList.add('show');
-      const successText = document.getElementById('rsvp-success-text');
-      if (rsvp.attendance === 'yes') {
-        successText.textContent = `Welcome back, ${rsvp.name}! We're excited to see you on September 19, 2026.`;
-      } else {
-        successText.textContent = `We received your regrets, ${rsvp.name}. Thank you for letting us know!`;
-      }
-    }
   }
 
   // -------------------------------------------------------------
@@ -219,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const wishForm = document.getElementById('wish-form');
   const wishesList = document.getElementById('wishes-list');
 
-  // Pre-loaded dummy wishes for a premium initial visual feel
   const initialWishes = [
     {
       name: "Olivia & Henry",
@@ -238,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) {
       return JSON.parse(saved);
     }
-    // Set initial template wishes if nothing in storage
     localStorage.setItem('wedding_wishes', JSON.stringify(initialWishes));
     return initialWishes;
   }
@@ -248,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const wishes = getWishes();
     wishesList.innerHTML = '';
     
-    // Render from newest to oldest
     wishes.slice().reverse().forEach(wish => {
       const card = document.createElement('div');
       card.className = 'wish-card';
@@ -290,14 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
       currentWishes.push(newWish);
       localStorage.setItem('wedding_wishes', JSON.stringify(currentWishes));
 
-      // Clear input fields
       nameInput.value = '';
       messageInput.value = '';
 
-      // Re-render wishes
       renderWishes();
 
-      // Smooth scroll to the top of the wishes list
       wishesList.scrollTo({
         top: 0,
         behavior: 'smooth'
@@ -305,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Load guestbook on startup
   renderWishes();
 
   // -------------------------------------------------------------
@@ -329,9 +249,8 @@ document.addEventListener('DOMContentLoaded', () => {
     osc.type = type;
     osc.frequency.setValueAtTime(freq, startTime);
     
-    // Luxury ambient envelope: very soft attack, gentle exponential decay
     gainNode.gain.setValueAtTime(0, startTime);
-    gainNode.gain.linearRampToValueAtTime(0.05, startTime + 0.3); // max 5% volume for soft background chime
+    gainNode.gain.linearRampToValueAtTime(0.04, startTime + 0.3); // max 4% volume
     gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
     
     osc.connect(gainNode);
@@ -341,12 +260,12 @@ document.addEventListener('DOMContentLoaded', () => {
     osc.stop(startTime + duration);
   }
 
-  // Romantic pastel chord progression (F Maj -> C Maj -> D min -> Bb Maj)
+  // Romantic progression: F Maj -> C Maj -> D min -> Bb Maj
   const chords = [
-    [174.61, 220.00, 261.63, 349.23], // F Maj (F3, A3, C4, F4)
-    [130.81, 196.00, 261.63, 329.63], // C Maj (C3, G3, C4, E4)
-    [146.83, 220.00, 293.66, 349.23], // D Min (D3, A3, D4, F4)
-    [116.54, 174.61, 233.08, 293.66]  // Bb Maj (Bb2, F3, Bb3, D4)
+    [174.61, 220.00, 261.63, 349.23], // F Maj
+    [130.81, 196.00, 261.63, 329.63], // C Maj
+    [146.83, 220.00, 293.66, 349.23], // D Min
+    [116.54, 174.61, 233.08, 293.66]  // Bb Maj
   ];
 
   let chordIndex = 0;
@@ -356,10 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = audioCtx.currentTime;
     const currentChord = chords[chordIndex];
 
-    // 1. Play warm bass root note (very slow decay)
     playNote(currentChord[0], now, 3.8, 'sine');
 
-    // 2. Gentle arpeggio timing
     setTimeout(() => { 
       if (isMusicPlaying) playNote(currentChord[1], audioCtx.currentTime, 3.2, 'triangle'); 
     }, 400);
@@ -372,9 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isMusicPlaying) playNote(currentChord[3], audioCtx.currentTime, 2.0, 'sine'); 
     }, 1200);
 
-    // 3. Occasional high chime note for dream-like texture
     if (Math.random() > 0.3) {
-      const highNotes = [523.25, 587.33, 659.25, 698.46, 783.99]; // C5, D5, E5, F5, G5
+      const highNotes = [523.25, 587.33, 659.25, 698.46, 783.99]; 
       const note = highNotes[Math.floor(Math.random() * highNotes.length)];
       setTimeout(() => { 
         if (isMusicPlaying) playNote(note, audioCtx.currentTime, 1.8, 'sine'); 
@@ -397,10 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const muteLine = document.querySelector('.mute-line');
     if (muteLine) muteLine.style.display = 'none';
 
-    // Play first chord immediately
     playChordStep();
-    
-    // Play next chord steps in loop
     melodyInterval = setInterval(playChordStep, 3500);
   }
 

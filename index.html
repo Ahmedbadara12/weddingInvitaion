@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="You are cordially invited to celebrate the love story and wedding of Alexander and Sophia. Save the date for our special day.">
   <title>Save the Date | Alexander & Sophia's Wedding</title>
+  
+  <!-- Preconnect to external assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Load model-viewer library for 3D and AR web experiences -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -58,7 +65,7 @@
   <!-- Wedding Details & RSVP Cards Section -->
   <main class="content-section">
     <div class="container">
-      <div class="grid-two-cols">
+      <div class="grid-three-cols">
         
         <!-- Wedding Details Card -->
         <section class="luxury-card reveal" id="details-card">
@@ -97,69 +104,73 @@
               </span>
               <div class="details-text">
                 <h4>Registries & Gifts</h4>
-                <p>Your presence is our greatest present. If you wish to honor us with a gift, a contribution to our honeymoon fund is appreciated.</p>
+                <p>Your presence is our greatest present. If you wish to honor us with a gift, a honeymoon fund contribution is appreciated.</p>
               </div>
             </li>
           </ul>
         </section>
 
-        <!-- RSVP Form Card -->
+        <!-- RSVP Google Form Card -->
         <section class="luxury-card reveal" id="rsvp-card">
           <div class="card-border-decor"></div>
-          <h2 class="card-title">RSVP</h2>
+          <h2 class="card-title">RSVP Form</h2>
           
-          <!-- RSVP Input Form -->
-          <form class="rsvp-form" id="rsvp-form-element">
-            <div class="form-group">
-              <label for="rsvp-name">Full Name</label>
-              <input type="text" id="rsvp-name" class="form-control" required placeholder="Please enter your name">
+          <div class="google-form-wrapper">
+            <div class="google-form-loading">
+              <div class="google-form-loading-spinner"></div>
+              Loading RSVP Form...
             </div>
-
-            <div class="form-group">
-              <label for="rsvp-email">Email Address</label>
-              <input type="email" id="rsvp-email" class="form-control" required placeholder="name@example.com">
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label>Will you attend?</label>
-                <div class="radio-group">
-                  <div class="radio-option">
-                    <input type="radio" id="attend-yes" name="attendance" value="yes" checked>
-                    <label for="attend-yes" class="radio-label">Accepts</label>
-                  </div>
-                  <div class="radio-option">
-                    <input type="radio" id="attend-no" name="attendance" value="no">
-                    <label for="attend-no" class="radio-label">Regrets</label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group" id="guests-group">
-                <label for="rsvp-guests">Number of Guests</label>
-                <select id="rsvp-guests" class="form-control">
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4 Guests</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="rsvp-message">Dietary requirements / Message</label>
-              <textarea id="rsvp-message" class="form-control" rows="3" placeholder="Optional notes..."></textarea>
-            </div>
-
-            <button type="submit" id="rsvp-submit-btn" class="btn-gold">Send Response</button>
-          </form>
-
-          <!-- Success Animation Message -->
-          <div class="success-message" id="rsvp-success">
-            <div class="success-icon" aria-hidden="true">❤</div>
-            <h3 class="card-title">Thank You!</h3>
-            <p id="rsvp-success-text">Your response has been received. We look forward to celebrating with you!</p>
+            
+            <!-- 
+              INSTRUCTION TO USER (Ahmedbadara12):
+              Replace the placeholder URL inside 'src' below with your actual Google Form Embed link.
+              To get it: Google Form -> Send -> Embed HTML (< >) -> copy the URL from src="..."
+            -->
+            <iframe 
+              id="google-form-iframe"
+              class="google-form-iframe"
+              src="https://docs.google.com/forms/d/e/1FAIpQLSeGf-G2w-fI0Z8ZzE7X1xJ8pZ3h8pZ3h8pZ3h8pZ3h8pZ3h8p/viewform?embedded=true" 
+              title="RSVP Form">
+            </iframe>
           </div>
+
+          <div class="google-form-fallback">
+            <!-- Replace the href below with the standard Google Form link -->
+            <a id="google-form-link" 
+               href="https://docs.google.com/forms/d/e/1FAIpQLSeGf-G2w-fI0Z8ZzE7X1xJ8pZ3h8pZ3h8pZ3h8pZ3h8pZ3h8p/viewform" 
+               target="_blank" 
+               rel="noopener" 
+               class="btn-gold" 
+               style="width: 100%; text-align: center; margin-top: 10px;">
+              Open RSVP in New Tab
+            </a>
+          </div>
+        </section>
+
+        <!-- Augmented Reality / 3D Keepsake Card -->
+        <section class="luxury-card reveal" id="ar-card">
+          <div class="card-border-decor"></div>
+          <h2 class="card-title">AR Keepsake</h2>
+          <p style="text-align: center; margin-bottom: 20px; font-size: 0.95rem; opacity: 0.85;">
+            Interact with our 3D wedding keepsake! Move, rotate, and zoom. Click the AR badge on mobile to place it in your room.
+          </p>
+
+          <!-- Google model-viewer loading a beautiful 3D glossy Red Heart -->
+          <model-viewer 
+            id="wedding-3d-model"
+            src="https://modelviewer.dev/shared-assets/models/Heart.glb" 
+            alt="A 3D romantic shiny red heart"
+            ar 
+            ar-modes="webxr scene-viewer quick-look" 
+            camera-controls 
+            tone-mapping="neutral"
+            shadow-intensity="1" 
+            auto-rotate>
+            <button slot="ar-button" class="ar-btn-model">
+              🌸 View in AR (Your Room)
+            </button>
+          </model-viewer>
+          <p class="ar-hint">Works best on iOS (Safari Quick Look) & Android (WebXR / Chrome)</p>
         </section>
 
       </div>

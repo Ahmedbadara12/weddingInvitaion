@@ -1,0 +1,389 @@
+<!-- Intro Video (Autoplay, Muted, Playsinline) -->
+@if (!isVideoEnded) {
+  <video
+    #introVideo
+    class="intro-video fixed inset-0 h-dvh w-full bg-black object-cover"
+    [class.fade-out]="isEnvelopeOpened"
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+    (ended)="onVideoEnded()"
+  >
+    <source src="/assets/mobileVerison.mp4" type="video/mp4" media="(max-width: 767px)" />
+    <source src="/assets/desktopVersion.mp4" type="video/mp4" media="(min-width: 768px)" />
+  </video>
+}
+
+<!-- 3D Luxury Envelope Intro Overlay -->
+<div
+  class="envelope-overlay fixed inset-0 flex items-center justify-center bg-wedding-blush"
+  [class.opened]="isEnvelopeOpened"
+>
+  <button
+    type="button"
+    class="envelope-wrapper w-full max-w-[480px] cursor-pointer p-6"
+    aria-label="افتح دعوة زفاف أحمد و روان"
+    (click)="openEnvelope()"
+  >
+    <div class="envelope" [class.open]="isEnvelopeOpened">
+      <!-- Envelope Flap (Top triangular fold) -->
+      <div class="envelope-flap"></div>
+
+      <!-- Envelope Card (Slides up) -->
+      <div class="envelope-card">
+        <div class="envelope-card-content">
+          <span class="envelope-monogram">A & R</span>
+          <h2 class="envelope-card-title">أحمد و روان</h2>
+          <p class="envelope-card-subtitle">دعوة زفاف</p>
+          <div class="envelope-divider"></div>
+          <p class="envelope-date">٣ سبتمبر ٢٠٢٦</p>
+          <p class="envelope-action">اضغط لفتح الدعوة</p>
+        </div>
+      </div>
+
+      <!-- Envelope Pocket Front/Back -->
+      <div class="envelope-pocket"></div>
+    </div>
+  </button>
+</div>
+
+<!-- Falling Flowers Background Container -->
+<div
+  class="flower-rain pointer-events-none fixed inset-0 overflow-hidden"
+  [class.active]="isEnvelopeOpened"
+  aria-hidden="true"
+>
+  @for (petal of flowerPetals; track $index) {
+    <span class="falling-flower">{{ petal }}</span>
+  }
+</div>
+
+<audio #backgroundMusic preload="auto" loop>
+  <source src="/assets/51TX41qx.mp3" type="audio/mpeg" />
+</audio>
+
+<!-- Floating Audio Controller (Rotating vinyl/disk disk icon) -->
+@if (isEnvelopeOpened) {
+  <div class="audio-player-container fixed bottom-6 right-6 z-[100]">
+    <button
+      type="button"
+      class="audio-btn flex size-13 items-center justify-center rounded-full border border-wedding-gold/30 bg-wedding-ivory text-wedding-gold-dark shadow-xl"
+      [class.playing]="isMusicPlaying"
+      (click)="toggleMusic()"
+      [attr.aria-label]="isMusicPlaying ? 'إيقاف الموسيقى الهادئة' : 'تشغيل الموسيقى الهادئة'"
+      [attr.aria-pressed]="isMusicPlaying"
+      title="تشغيل أو إيقاف الموسيقى"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+        @if (!isMusicPlaying) {
+          <line
+            x1="1"
+            y1="1"
+            x2="23"
+            y2="23"
+            class="mute-line"
+            stroke="currentColor"
+            stroke-width="2"
+          ></line>
+        }
+      </svg>
+    </button>
+    @if (audioError) {
+      <p class="audio-error" role="status">{{ audioError }}</p>
+    }
+  </div>
+}
+
+<!-- Main Invitation Page Content (Fades in once envelope is opened) -->
+<div class="main-content" [class.show]="isEnvelopeOpened" [attr.aria-hidden]="!isEnvelopeOpened">
+  <!-- Hero Header -->
+  <header
+    class="hero relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 py-20 text-center"
+  >
+    <div class="hero-header relative z-10 mb-10">
+      <p class="bismillah font-arabic-serif text-wedding-gold-dark">
+        بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ
+      </p>
+      <p
+        class="hero-date mb-3 text-sm font-bold tracking-[0.25em] text-wedding-gold uppercase md:text-base"
+      >
+        الخميس، ٣ سبتمبر ٢٠٢٦
+      </p>
+      <h1 class="hero-names font-arabic-serif text-wedding-charcoal">أحمد<span>&</span>روان</h1>
+      <p class="hero-subtitle mx-auto max-w-3xl font-arabic-serif text-wedding-charcoal/80">
+        يشرفنا دعوتكم لمشاركتنا فرحة عقد قراننا وزفافنا، سائلين الله أن يبارك لنا ويجمع بيننا في
+        خير.
+      </p>
+      <p class="quran-verse mx-auto mt-6 max-w-3xl font-arabic-serif text-wedding-gold-dark">
+        ﴿وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا
+        وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً﴾
+      </p>
+    </div>
+
+    <!-- Sliced Transparent Vector Illustration (Animate-on-Scroll Trigger) -->
+    <div
+      class="illustration-wrapper relative z-10 mx-auto aspect-video w-full max-w-[720px] overflow-hidden rounded-3xl border-4 border-wedding-ivory shadow-2xl"
+      id="illustration-card"
+      role="img"
+      aria-label="رسم رومانسي للعريس والعروس مع الورود والقلوب"
+    >
+      <div class="illustration-grid">
+        <div class="illustration-layer layer-groom" aria-hidden="true"></div>
+        <div class="illustration-layer layer-center" aria-hidden="true"></div>
+        <div class="illustration-layer layer-bride" aria-hidden="true"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- RxJS-Driven Countdown Section -->
+  @if (countdown$ | async; as cd) {
+    <section
+      class="countdown-section bg-wedding-blush py-20 text-center"
+      aria-label="Countdown to wedding"
+    >
+      <div class="container mx-auto max-w-6xl px-6">
+        <h2 class="countdown-title mb-8 font-arabic-serif text-3xl text-wedding-charcoal">
+          باقي على يوم الفرح
+        </h2>
+        <div class="countdown-container flex flex-wrap justify-center gap-4">
+          <div
+            class="countdown-item show min-w-24 rounded-xl border border-wedding-pink/25 bg-wedding-ivory p-5 shadow-lg"
+          >
+            <div
+              class="countdown-number font-arabic-serif text-4xl font-bold text-wedding-gold-dark"
+            >
+              {{ cd.days }}
+            </div>
+            <div
+              class="countdown-label mt-1 text-xs font-semibold tracking-[0.2em] text-wedding-charcoal/80 uppercase"
+            >
+              يوم
+            </div>
+          </div>
+          <div
+            class="countdown-item show min-w-24 rounded-xl border border-wedding-pink/25 bg-wedding-ivory p-5 shadow-lg"
+          >
+            <div
+              class="countdown-number font-arabic-serif text-4xl font-bold text-wedding-gold-dark"
+            >
+              {{ cd.hours }}
+            </div>
+            <div
+              class="countdown-label mt-1 text-xs font-semibold tracking-[0.2em] text-wedding-charcoal/80 uppercase"
+            >
+              ساعة
+            </div>
+          </div>
+          <div
+            class="countdown-item show min-w-24 rounded-xl border border-wedding-pink/25 bg-wedding-ivory p-5 shadow-lg"
+          >
+            <div
+              class="countdown-number font-arabic-serif text-4xl font-bold text-wedding-gold-dark"
+            >
+              {{ cd.minutes }}
+            </div>
+            <div
+              class="countdown-label mt-1 text-xs font-semibold tracking-[0.2em] text-wedding-charcoal/80 uppercase"
+            >
+              دقيقة
+            </div>
+          </div>
+          <div
+            class="countdown-item show min-w-24 rounded-xl border border-wedding-pink/25 bg-wedding-ivory p-5 shadow-lg"
+          >
+            <div
+              class="countdown-number font-arabic-serif text-4xl font-bold text-wedding-gold-dark"
+            >
+              {{ cd.seconds }}
+            </div>
+            <div
+              class="countdown-label mt-1 text-xs font-semibold tracking-[0.2em] text-wedding-charcoal/80 uppercase"
+            >
+              ثانية
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <section
+    class="timeline-section reveal border-y border-wedding-gold/15 bg-wedding-ivory py-24"
+    aria-label="رحلة أحمد وروان"
+  >
+    <div class="container mx-auto max-w-6xl px-6">
+      <h2 class="countdown-title mb-8 text-center font-arabic-serif text-3xl text-wedding-charcoal">
+        حكايتنا
+      </h2>
+      <div class="timeline mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        <article
+          class="timeline-card rounded-3xl border border-wedding-gold/20 bg-wedding-beige p-8 text-center shadow-lg"
+        >
+          <span class="timeline-date mb-3 inline-flex font-extrabold text-wedding-gold-dark"
+            >٤ أبريل ٢٠٢٥</span
+          >
+          <h3 class="font-arabic-serif text-3xl text-wedding-charcoal">الخطوبة</h3>
+          <p class="mt-2 leading-8 text-wedding-charcoal/80">
+            بدأت رحلتنا رسميًا على بركة الله، وسط دعوات الأهل وفرحة الأحباب.
+          </p>
+        </article>
+        <article
+          class="timeline-card rounded-3xl border border-wedding-gold/20 bg-wedding-beige p-8 text-center shadow-lg"
+        >
+          <span class="timeline-date mb-3 inline-flex font-extrabold text-wedding-gold-dark"
+            >٣ سبتمبر ٢٠٢٦</span
+          >
+          <h3 class="font-arabic-serif text-3xl text-wedding-charcoal">الزفاف</h3>
+          <p class="mt-2 leading-8 text-wedding-charcoal/80">
+            ننتظر وجودكم معنا لتكتمل الفرحة ونبدأ فصلًا جديدًا بالدعاء والبركة.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wedding Details and Blessing Cards Section -->
+  <main class="content-section px-4 py-16 sm:px-6 lg:py-24">
+    <div class="container mx-auto max-w-5xl">
+      <div class="mb-10 text-center">
+        <p class="font-arabic-serif text-lg text-wedding-gold-dark">تشريفكم يسعدنا</p>
+        <h2 class="mt-2 font-arabic-serif text-3xl text-wedding-charcoal md:text-4xl">
+          تفاصيل اليوم المبارك
+        </h2>
+      </div>
+      <div
+        class="grid-three-cols mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:gap-8"
+      >
+        <!-- Wedding Details Card -->
+        <section
+          class="luxury-card reveal relative h-full overflow-hidden rounded-3xl border border-wedding-gold/15 bg-wedding-ivory p-6 shadow-2xl sm:p-8 lg:p-10"
+          id="details-card"
+        >
+          <div class="card-border-decor"></div>
+          <h2 class="card-title mb-6 text-center font-arabic-serif text-3xl text-wedding-charcoal">
+            تفاصيل الفرح
+          </h2>
+
+          <ul class="details-list space-y-6">
+            <li class="details-item flex items-start">
+              <span class="details-icon mt-1 ml-4 flex text-wedding-gold" aria-hidden="true">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </span>
+              <div class="details-text">
+                <h4 class="font-bold text-wedding-charcoal">المعاد</h4>
+                <p class="mt-1 text-wedding-charcoal/80">
+                  الخميس ٣ سبتمبر ٢٠٢٦ - الساعة ٤:٣٠ مساءً
+                </p>
+                <p class="mt-1 text-wedding-charcoal/80">نتشرف بحضوركم قبل الموعد بوقت مناسب.</p>
+              </div>
+            </li>
+
+            <li class="details-item flex items-start">
+              <span class="details-icon mt-1 ml-4 flex text-wedding-gold" aria-hidden="true">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </span>
+              <div class="details-text">
+                <h4 class="font-bold text-wedding-charcoal">المكان</h4>
+                <p>
+                  <a
+                    class="map-link font-bold text-wedding-gold-dark underline decoration-wedding-gold/50 underline-offset-4"
+                    href="https://maps.app.goo.gl/gjXCwiNpQoTPv8ux8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    افتح الموقع على خرائط Google
+                  </a>
+                </p>
+                <p class="mt-1 text-wedding-charcoal/80">حضوركم ودعواتكم أجمل ما نتمناه.</p>
+              </div>
+            </li>
+
+            <li class="details-item flex items-start">
+              <span class="details-icon mt-1 ml-4 flex text-wedding-gold" aria-hidden="true">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+              </span>
+              <div class="details-text">
+                <h4 class="font-bold text-wedding-charcoal">دعاؤكم يكفينا</h4>
+                <p class="mt-1 text-wedding-charcoal/80">
+                  نسأل الله أن يبارك لنا ولكم، وأن يجعل هذا اليوم بداية خير ومودة ورحمة.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+        <!-- Islamic Blessing Card -->
+        <section
+          class="luxury-card reveal relative h-full overflow-hidden rounded-3xl border border-wedding-gold/15 bg-wedding-ivory p-6 shadow-2xl sm:p-8 lg:p-10"
+          id="ar-card"
+        >
+          <div class="card-border-decor"></div>
+          <h2 class="card-title mb-6 text-center font-arabic-serif text-3xl text-wedding-charcoal">
+            دعاء لنا
+          </h2>
+          <p class="card-intro mb-5 text-center text-wedding-charcoal/80">
+            وجودكم ودعاؤكم هما أجمل تذكار لنا في هذا اليوم المبارك.
+          </p>
+          <div
+            class="dua-keepsake grid min-h-64 place-items-center gap-4 rounded-xl border border-wedding-gold/25 bg-gradient-to-br from-wedding-ivory to-wedding-beige p-8 text-center"
+            aria-label="دعاء الزواج"
+          >
+            <span class="text-3xl text-wedding-gold" aria-hidden="true">☾</span>
+            <p class="max-w-sm font-arabic-serif text-2xl leading-loose text-wedding-gold-dark">
+              بارك الله لكما، وبارك عليكما، وجمع بينكما في خير.
+            </p>
+            <span class="text-3xl text-wedding-gold" aria-hidden="true">✦</span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

@@ -167,6 +167,7 @@ h1, h2, h3, h4 {
   margin: 0 auto 40px auto;
   z-index: 2;
   border: 4px solid var(--color-ivory);
+  background-color: transparent; /* Seamless transparent card content */
 }
 
 .illustration-grid {
@@ -181,7 +182,7 @@ h1, h2, h3, h4 {
   background-repeat: no-repeat;
   background-size: 300% 100%;
   height: 100%;
-  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.8s ease;
+  mix-blend-mode: multiply; /* Blends pure white background colors into transparency */
 }
 
 .layer-groom {
@@ -194,6 +195,7 @@ h1, h2, h3, h4 {
   background-position: 50% center;
   transform: scale(0.7);
   opacity: 0;
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.8s ease;
 }
 
 .layer-bride {
@@ -202,10 +204,11 @@ h1, h2, h3, h4 {
   opacity: 0;
 }
 
-/* Activated Class via JS */
+/* Advanced Animated walk states */
 .illustration-wrapper.animate .layer-groom {
-  transform: translateX(0);
-  opacity: 1;
+  animation: 
+    slideInGroom 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    bobGroom 1.2s ease-in-out infinite alternate 1.8s;
 }
 
 .illustration-wrapper.animate .layer-center {
@@ -215,8 +218,51 @@ h1, h2, h3, h4 {
 }
 
 .illustration-wrapper.animate .layer-bride {
-  transform: translateX(0);
-  opacity: 1;
+  animation: 
+    slideInBride 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    bobBride 1.2s ease-in-out infinite alternate 1.8s;
+}
+
+/* Keyframes for sliding walk entry */
+@keyframes slideInGroom {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBride {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for walking bobbing action */
+@keyframes bobGroom {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+@keyframes bobBride {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-8px) scale(0.98);
+  }
 }
 
 /* Floating Hearts Elements */
@@ -321,6 +367,25 @@ h1, h2, h3, h4 {
   }
 }
 
+/* Three columns layout for details, rsvp and ar */
+.grid-three-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+@media(min-width: 768px) {
+  .grid-three-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(min-width: 1200px) {
+  .grid-three-cols {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 /* Luxury Cards */
 .luxury-card {
   background: var(--color-ivory);
@@ -332,7 +397,7 @@ h1, h2, h3, h4 {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   transform: translateY(40px);
   opacity: 0;
   transition: var(--transition-smooth);
@@ -393,90 +458,90 @@ h1, h2, h3, h4 {
   margin-top: 4px;
 }
 
-/* RSVP Form Styles */
-.rsvp-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  z-index: 2;
+/* Google Form RSVP Styles */
+.google-form-wrapper {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  background-color: var(--color-beige-light);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.03);
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.google-form-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
-.form-group label {
+.google-form-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-gold-dark);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 0;
+}
+
+.google-form-loading-spinner {
+  border: 3px solid var(--color-beige);
+  border-top: 3px solid var(--color-gold);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.google-form-fallback {
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* 3D Model Viewer Styles */
+model-viewer {
+  width: 100%;
+  height: 320px;
+  background-color: var(--color-beige-light);
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  position: relative;
+  --poster-color: transparent;
+}
+
+.ar-btn-model {
+  background-color: var(--color-ivory);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 12px rgba(44, 42, 41, 0.08);
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  font-family: var(--font-sans);
   font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
   color: var(--color-gold-dark);
-}
-
-.form-control {
-  font-family: var(--font-sans);
-  padding: 14px 18px;
-  border-radius: var(--border-radius-md);
-  border: 1px solid rgba(197, 160, 89, 0.3);
-  background: var(--color-beige-light);
-  color: var(--color-charcoal);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
-  background: var(--color-ivory);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media(min-width: 576px) {
-  .form-row {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.radio-group {
-  display: flex;
-  gap: 15px;
-  margin-top: 5px;
-}
-
-.radio-option {
-  flex: 1;
-}
-
-.radio-option input[type="radio"] {
-  display: none;
-}
-
-.radio-label {
-  display: block;
-  text-align: center;
-  padding: 12px;
-  background: var(--color-beige-light);
-  border: 1px solid rgba(197, 160, 89, 0.2);
-  border-radius: var(--border-radius-md);
   cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
 }
 
-.radio-option input[type="radio"]:checked + .radio-label {
-  background: var(--color-blush-pink-light);
+.ar-btn-model:hover {
+  background-color: var(--color-blush-pink-light);
   border-color: var(--color-blush-pink-dark);
-  color: var(--color-charcoal);
-  font-weight: 600;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(44, 42, 41, 0.15);
 }
 
 /* Gold Button Style */
@@ -485,16 +550,17 @@ h1, h2, h3, h4 {
   background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
   color: var(--color-ivory);
   border: none;
-  padding: 16px 30px;
+  padding: 14px 26px;
   border-radius: var(--border-radius-md);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(197, 160, 89, 0.25);
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  margin-top: 10px;
+  display: inline-block;
+  text-decoration: none;
 }
 
 .btn-gold:hover {
@@ -505,31 +571,6 @@ h1, h2, h3, h4 {
 
 .btn-gold:active {
   transform: translateY(1px);
-}
-
-/* Success Message styles */
-.success-message {
-  text-align: center;
-  padding: 20px;
-  opacity: 0;
-  transform: scale(0.9);
-  transition: var(--transition-smooth);
-  display: none;
-}
-
-.success-message.show {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  opacity: 1;
-  transform: scale(1);
-}
-
-.success-icon {
-  font-size: 4rem;
-  color: var(--color-gold);
-  margin-bottom: 15px;
-  animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Guestbook Section */
@@ -662,4 +703,23 @@ h1, h2, h3, h4 {
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Form controls styling for Guestbook form */
+.form-control {
+  font-family: var(--font-sans);
+  padding: 14px 18px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  background: var(--color-beige-light);
+  color: var(--color-charcoal);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
+  background: var(--color-ivory);
 }
